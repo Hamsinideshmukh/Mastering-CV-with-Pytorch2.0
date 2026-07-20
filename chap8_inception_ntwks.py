@@ -196,6 +196,19 @@ loss = loss1 + 0.4 * loss2 # Combine losses from the main and
 auxiliary outputs
 loss.backward() # Backpropagate the losses
 optimizer.step() # Update weights
+
+inceptionv3_pretrained.eval() # Set the model to evaluation mode
+correct = 0
+total = 0
+with torch.no_grad():
+    for images, labels in test_loader:
+    images, labels = images.to(device), labels.to(device)
+    outputs, _ = inceptionv3_pretrained(images) # Ignore auxiliary outputs during inference
+    _, predicted = torch.max(outputs.data, 1)
+    total += labels.size(0)
+    correct += (predicted == labels).sum().item()
+accuracy = correct / total
+print(f'Accuracy on the test set: {100 * accuracy}%')
 running_loss += loss.item()
 print(f'Epoch {epoch + 1}: Loss: {running_loss / len(train_loader)}')
 # Save the model's state dictionary
