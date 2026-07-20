@@ -136,7 +136,6 @@ class InceptionV3(nn.Module):
           x = self.Mixed_5b(x)
 
           # Final forward pass through later inception modules
-
           x = self.conv_after(x)
 
           # Adaptive average pooling and classifier
